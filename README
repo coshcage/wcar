@@ -1,0 +1,8 @@
+﻿Word correction and recommendation.
+Compilation guide:
+Put all files with StoneValley together and run:
+cc *.c -o wcar
+You may download StoneValley from here:
+https://github.com/coshcage/StoneValley
+NO WARRANTY
+All files are published with <Public Domain> license.
