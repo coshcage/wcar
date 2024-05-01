@@ -76,8 +76,8 @@ int cbfcmpchar(const void * px, const void * py)
 
 void PrintUsage(void)
 {
-	printf("wcar word [editorial_length]\n");
-	printf("\tEditorial length can be an integer. Default value is 1.\n");
+	printf("wcar word [editorial_distance]\n");
+	printf("\tEditorial distance can be an integer. Default value is 1.\n");
 }
 
 int main(int argc, char ** argv)
