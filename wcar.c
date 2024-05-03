@@ -2,7 +2,7 @@
  * Name:        wcar.c
  * Description: Word correction and recommendation.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0430240345B0430240600L00173
+ * File ID:     0430240345B0430240600L00176
  * License:     Public Domain.
  */
 #include <stdio.h>
@@ -104,7 +104,6 @@ int main(int argc, char ** argv)
 		TRIE_A pt;
 		ARRAY_Z arrword, arrcorr;
 		MATRIX mat;
-		size_t * psizt;
 
 		treInitTrieA(&pt);
 		strInitArrayZ(&arrword, BUFSIZ, sizeof(buffer));
@@ -139,7 +138,9 @@ int main(int argc, char ** argv)
 		}
 		strResizeArrayZ(&arrword, j, sizeof(buffer));
 
-		if (NULL == (psizt = treSearchTrieA(&pt, argv[1], strlen(argv[1]), sizeof(char), cbfcmpchar)))
+		j = 0;
+
+		if (NULL == treSearchTrieA(&pt, argv[1], strlen(argv[1]), sizeof(char), cbfcmpchar))
 		{
 			for (j = i = 0; i < strLevelArrayZ(&arrword); ++i)
 			{
@@ -153,7 +154,7 @@ int main(int argc, char ** argv)
 			}
 			strResizeArrayZ(&arrcorr, j, sizeof(CORRECTION));
 
-			strSortArrayZ(&arrcorr, sizeof(CORRECTION), _grpCBFCompareInteger);
+			svMergeSort(arrcorr.pdata, strLevelArrayZ(&arrcorr), sizeof(CORRECTION), _grpCBFCompareInteger);
 
 			for (i = 0; i < strLevelArrayZ(&arrcorr); ++i)
 				printf("%s\n", ((P_CORRECTION)strLocateItemArrayZ(&arrcorr, sizeof(CORRECTION), i))->pstr);
@@ -164,6 +165,8 @@ int main(int argc, char ** argv)
 		strFreeArrayZ(&arrword);
 		strFreeArrayZ(&arrcorr);
 		strFreeMatrix(&mat);
+
+		return j;
 	}
 	else
 		fprintf(stderr, "Open database error.\n");
