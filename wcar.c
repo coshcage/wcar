@@ -2,7 +2,7 @@
  * Name:        wcar.c
  * Description: Word correction and recommendation.
  * Author:      cosh.cage#hotmail.com
- * File ID:     0430240345B0430240600L00176
+ * File ID:     0430240345B0503240722L00180
  * License:     Public Domain.
  */
 #include <stdio.h>
@@ -139,12 +139,13 @@ int main(int argc, char ** argv)
 		strResizeArrayZ(&arrword, j, sizeof(buffer));
 
 		j = 0;
+		strncpy(buffer, argv[1], 26); /* Add this to make this program safer to avoid buffer overflow. */
 
-		if (NULL == treSearchTrieA(&pt, argv[1], strlen(argv[1]), sizeof(char), cbfcmpchar))
+		if (NULL == treSearchTrieA(&pt, buffer, strlen(buffer), sizeof(char), cbfcmpchar))
 		{
 			for (j = i = 0; i < strLevelArrayZ(&arrword); ++i)
 			{
-				if ((k = WagnerFischer(&mat, (const char *)strLocateItemArrayZ(&arrword, sizeof(buffer), i), argv[1])) <= s)
+				if ((k = WagnerFischer(&mat, (const char *)strLocateItemArrayZ(&arrword, sizeof(buffer), i), buffer)) <= s)
 				{
 					((P_CORRECTION)strLocateItemArrayZ(&arrcorr, sizeof(CORRECTION), j))->pstr = (char *)strLocateItemArrayZ(&arrword, sizeof(buffer), i);
 					((P_CORRECTION)strLocateItemArrayZ(&arrcorr, sizeof(CORRECTION), j))->s = k;
@@ -158,6 +159,9 @@ int main(int argc, char ** argv)
 
 			for (i = 0; i < strLevelArrayZ(&arrcorr); ++i)
 				printf("%s\n", ((P_CORRECTION)strLocateItemArrayZ(&arrcorr, sizeof(CORRECTION), i))->pstr);
+
+			if (0 == i)
+				printf("Nothing to replace with. Try a different editorial distance.\n");
 		}
 		
 		fclose(fp);
